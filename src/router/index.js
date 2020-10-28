@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
 
-import { createMiddlewarePipeline, notFound } from '@/router/middleware'
+import { createMiddlewarePipeline, notFound, notAuth, auth, logout } from '@/router/middleware'
 
 Vue.use(VueRouter)
 
@@ -13,7 +13,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "AuthLayout" */ '@/layouts/AppLogin'),
     redirect: { name: 'login' },
     meta: {
-      // middleware: [notAuth]
+      middleware: [notAuth]
     },
     children: [
       {
@@ -27,15 +27,42 @@ const routes = [
     path: '/',
     name: 'AppMain',
     component: () => import(/* webpackChunkName: "MainLayout" */ '@/layouts/AppMain'),
-    redirect: { name: 'summary' },
+    redirect: { name: 'AnimalsDashboard' },
     meta: {
-      // middleware: [auth]
+      middleware: [auth]
     },
     children: [
       {
-        path: '/',
-        name: 'summary',
+        path: '/animals-dashboard',
+        name: 'AnimalsDashboard',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
+      },
+      {
+        path: '/shelters',
+        name: 'Shelters',
+        component: () => import(/* webpackChunkName: "shelters" */ '@/views/Shelters.vue')
+      },
+      {
+        path: '/acts',
+        name: 'Acts',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
+      },
+      {
+        path: '/reports',
+        name: 'Reports',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
+      },
+      {
+        path: '/applications',
+        name: 'Applications',
+        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
+      },
+      {
+        path: '/logout',
+        name: 'Logout',
+        meta: {
+          middleware: [logout]
+        }
       }
     ]
   }

@@ -1,4 +1,7 @@
 import notFound from './notFound'
+import auth from './auth'
+import notAuth from './notAuth'
+import logout from './logout'
 
 function createMiddlewarePipeline(context, middleware) {
   if (!middleware.length) {
@@ -18,4 +21,4 @@ function createMiddlewarePipeline(context, middleware) {
   }
 }
 
-export { notFound, createMiddlewarePipeline }
+export { notFound, auth, notAuth, logout, createMiddlewarePipeline }

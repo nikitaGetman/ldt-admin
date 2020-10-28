@@ -34,7 +34,27 @@ client.interceptors.response.use(
 )
 
 const apiService = {
-  client
+  client,
+
+  auth({ login, password }) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const model = { login, password, access: 'access' }
+        resolve(model)
+      }, 1000)
+    })
+    // return this.client.post('/api/auth', { login, password })
+  },
+  fetchProfile() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve({ name: 'Иван', surname: 'Иванов' })
+      }, 0)
+    })
+  },
+  fetchAnimals(params) {
+    return this.client.get('/api/animals', { params })
+  }
 }
 
 export default apiService
