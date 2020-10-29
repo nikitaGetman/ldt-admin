@@ -35,6 +35,16 @@ export default {
         .catch(throwError(commit, 'Ошибка получения списка животных (fetchAnimals)'))
         .finally(() => commit(LOADED, MODULE_NAME))
     },
+    [FETCH_ANIMAL]: ({ commit, getters }, id) => {
+      commit(LOADING, MODULE_NAME)
+      return getters.apiService
+        .fetchAnimal(id)
+        .then(model => {
+          commit(SET_MODEL, { name: MODULE_NAME, model })
+        })
+        .catch(throwError(commit, 'Ошибка получения данных животного (fetchAnimal)'))
+        .finally(() => commit(LOADED, MODULE_NAME))
+    },
     [LOGOUT]: ({ commit }) => {
       commit(SET_MODEL, { name: MODULE_NAME, model: {} })
       commit(SET_LIST, { name: MODULE_NAME, list: [] })

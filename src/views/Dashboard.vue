@@ -50,7 +50,7 @@
         </el-col>
 
         <el-col :span="3">
-          <el-button plain icon="el-icon-document-add" @click="importData">Импорт</el-button>
+          <el-button plain icon="el-icon-document-add" @click="importDialogVisible = true">Импорт</el-button>
         </el-col>
 
         <el-col :span="3">
@@ -70,6 +70,33 @@
       <p class="dashboard__list-info" v-if="loading"><i class="el-icon-loading"></i> Загрузка...</p>
       <p class="dashboard__list-info" v-if="isAllLoaded">Все данные загружены</p>
     </div>
+
+    <!-- dialogs -->
+    <el-dialog
+      class="dashboard__upload-dialog"
+      title="Загрузка данных"
+      :visible.sync="importDialogVisible"
+      append-to-body
+      width="40%"
+    >
+      <el-upload
+        class="dashboard__upload-form"
+        ref="uploadForm"
+        drag
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :auto-upload="false"
+        :on-success="handleFileUploadSuccess"
+        :on-error="handleFileUploadError"
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">Переместите файл сода или <em>кликните для загрузки</em></div>
+        <div class="el-upload__tip" slot="tip">Прикрепите файлы в формате: xls/csv</div>
+      </el-upload>
+      <div slot="footer">
+        <el-button @click="importDialogVisible = false">Отмена</el-button>
+        <el-button type="primary" @click="upload">Загрузить</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -91,7 +118,9 @@ export default {
       id: null,
       size: null,
       sort: null,
-      order: null
+      order: null,
+
+      importDialogVisible: false
     }
   },
   computed: {
@@ -180,8 +209,25 @@ export default {
     search() {
       this.fetch({ offset: 0 })
     },
-    importData() {
-      console.log('import')
+    upload() {
+      console.log('upload')
+      this.$refs.uploadForm.submit()
+    },
+    handleFileUploadSuccess(res, file) {
+      console.log(res, file)
+      this.$notify({
+        title: 'Файл загружен',
+        message: `Файл ${file.name} успешно загружен`,
+        type: 'success'
+      })
+    },
+    handleFileUploadError(err, file) {
+      console.log(err, file)
+      this.$notify({
+        title: 'Ошибка загрузки',
+        message: `Не удалось загрузить файл ${file.name}`,
+        type: 'error'
+      })
     }
   }
 }
@@ -220,6 +266,19 @@ export default {
   &__list-info {
     margin: 32px 0 0;
     text-align: center;
+  }
+
+  &__upload-dialog {
+  }
+
+  &__upload-form {
+    width: 100%;
+
+    .el-upload,
+    .el-upload-dragger {
+      display: block;
+      width: 100%;
+    }
   }
 }
 </style>

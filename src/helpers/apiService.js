@@ -61,6 +61,27 @@ const apiService = {
       }, 500)
     })
     // return this.client.get('/api/animals', { params })
+  },
+  fetchAnimal(id) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const data = { id }
+        resolve(data)
+      }, 500)
+    })
+  },
+  fetchAnimalActs(id) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const list = [
+          { date: '2020-01-10', type: 'Акт отлова', link: 'files/act.xls', id: `${id}-1` },
+          { date: '2020-01-12', type: 'Акт осмотра', link: 'files/act.xls', id: `id-2` },
+          { date: '2020-03-10', type: 'Акт приема передачи', link: 'files/act.xls', id: `id-3` }
+        ]
+        resolve(list)
+      }, 3000)
+    })
+    // return this.client.get('/api/animal/acts', { params: { id } })
   }
 }
 
