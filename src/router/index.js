@@ -38,6 +38,12 @@ const routes = [
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
       },
       {
+        path: '/animal/:id',
+        name: 'AnimalCard',
+        props: true,
+        component: () => import(/* webpackChunkName: "animal-card" */ '@/views/AnimalCard.vue')
+      },
+      {
         path: '/shelters',
         name: 'Shelters',
         component: () => import(/* webpackChunkName: "shelters" */ '@/views/Shelters.vue')

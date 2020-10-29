@@ -53,7 +53,14 @@ const apiService = {
     })
   },
   fetchAnimals(params) {
-    return this.client.get('/api/animals', { params })
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const list = [{ value: params.offset, id: params.offset }]
+        const data = { list, count: 10 }
+        resolve(data)
+      }, 500)
+    })
+    // return this.client.get('/api/animals', { params })
   }
 }
 

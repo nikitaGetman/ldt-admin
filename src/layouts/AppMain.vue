@@ -1,13 +1,13 @@
 <template>
-  <el-container class="main">
+  <el-container class="main main__section">
     <el-header class="main__header">
       <span>Животные без владельцев</span>
     </el-header>
-    <el-container>
+    <el-container class="main__section">
       <el-aside width="240px">
         <the-navbar />
       </el-aside>
-      <el-main>
+      <el-main class="main__content">
         <transition name="el-fade-in" mode="out-in">
           <router-view />
         </transition>
@@ -34,6 +34,14 @@ export default {
     align-items: center;
     background-color: #54a8ff;
     color: #ffffff;
+  }
+
+  &__content {
+    padding-bottom: 0;
+  }
+
+  &__section {
+    overflow: hidden;
   }
 }
 </style>

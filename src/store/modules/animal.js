@@ -14,7 +14,8 @@ export default {
     list: [],
     params: {
       limit: 10,
-      offset: 0
+      offset: 0,
+      count: null
     }
   },
   actions: {
@@ -24,9 +25,12 @@ export default {
       commit(LOADING, MODULE_NAME)
       return getters.apiService
         .fetchAnimals(params)
-        .then(list => {
+        .then(({ list, count }) => {
           commit(SET_LIST, { name: MODULE_NAME, list: [...state.list, ...list] })
-          commit(UPDATE_PARAMS, { name: MODULE_NAME, params: { offset: params.offset + list.length } })
+          commit(UPDATE_PARAMS, {
+            name: MODULE_NAME,
+            params: { offset: params.offset + list.length, count }
+          })
         })
         .catch(throwError(commit, 'Ошибка получения списка животных (fetchAnimals)'))
         .finally(() => commit(LOADED, MODULE_NAME))
@@ -34,7 +38,7 @@ export default {
     [LOGOUT]: ({ commit }) => {
       commit(SET_MODEL, { name: MODULE_NAME, model: {} })
       commit(SET_LIST, { name: MODULE_NAME, list: [] })
-      commit(SET_PARAMS, { name: MODULE_NAME, params: { limit: 10, offset: 0 } })
+      commit(SET_PARAMS, { name: MODULE_NAME, params: { limit: 10, offset: 0, count: null } })
     }
   }
 }
