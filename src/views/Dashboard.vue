@@ -2,11 +2,11 @@
   <div class="dashboard">
     <h3>Картотека животных</h3>
 
-    <div class="dashboard__filters">
+    <div class="dashboard__params">
       <el-row class="dashboard__filter-row" :gutter="20">
         <el-col :span="8">
           <el-select v-model="shelter" clearable placeholder="Приют">
-            <el-option v-for="item in shelterOptions" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="item in shelterOptions" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-col>
 
@@ -17,7 +17,9 @@
         </el-col>
         <el-col :span="4">
           <el-select v-model="sex" clearable placeholder="Пол животного">
-            <el-option v-for="item in sexOptions" :key="item.value" :label="item.label" :value="item.value" />
+            <el-option v-for="item in sexOptions" :key="item.value" :label="item.label" :value="item.value">
+              {{ item.label }} <i :class="item.icon"></i>
+            </el-option>
           </el-select>
         </el-col>
 
@@ -35,26 +37,30 @@
       </el-row>
 
       <el-row class="dashboard__filter-row" :gutter="20">
-        <el-col :span="5">
+        <el-col :span="4">
           <el-input placeholder="Персональный ID" v-model="id" clearable />
         </el-col>
 
-        <el-col :span="5">
+        <el-col :span="4">
           <el-input placeholder="Кличка" v-model="nickname" clearable />
         </el-col>
 
-        <el-col :span="5">
+        <el-col :span="4">
           <el-select v-model="readyToPickUp" clearable placeholder="Готово к социализации">
             <el-option v-for="item in socialOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-col>
 
         <el-col :span="3">
-          <el-button plain icon="el-icon-document-add" @click="importDialogVisible = true">Импорт</el-button>
+          <el-button plain icon="el-icon-upload2" @click="importDialogVisible = true">Импорт</el-button>
         </el-col>
 
         <el-col :span="3">
-          <el-button plain icon="el-icon-delete" @click="reset">Сброс</el-button>
+          <el-button plain icon="el-icon-document-add" @click="createNewCardVisible = true">Создать</el-button>
+        </el-col>
+
+        <el-col :span="3">
+          <el-button plain type="danger" icon="el-icon-delete" @click="reset">Сброс</el-button>
         </el-col>
 
         <el-col :span="3">
@@ -64,7 +70,12 @@
     </div>
 
     <div class="dashboard__list-wrapper">
-      <ul class="dashboard__list" v-infinite-scroll="fetch" infinite-scroll-disabled="infiniteScrollDisabled">
+      <ul
+        class="dashboard__list"
+        v-infinite-scroll="fetch"
+        infinite-scroll-disabled="infiniteScrollDisabled"
+        v-if="animalsList.length > 0"
+      >
         <v-animal-item v-for="(item, index) in animalsList" :key="index" :animal="item"></v-animal-item>
       </ul>
       <p class="dashboard__list-info" v-if="loading"><i class="el-icon-loading"></i> Загрузка...</p>
@@ -97,16 +108,21 @@
         <el-button type="primary" @click="upload">Загрузить</el-button>
       </div>
     </el-dialog>
+
+    <v-animal-card-edit :visible.sync="createNewCardVisible" @done="createNewCard" />
   </div>
 </template>
 
 <script>
 import VAnimalItem from '@/components/VAnimalItem.vue'
+import VAnimalCardEdit from '@/components/VAnimalCardEdit.vue'
 import { FETCH_ANIMALS, MODULE_NAME as ANIMALS_MODULE } from '@/store/modules/animal'
+import { MODULE_NAME as SHELTERS_MODULE } from '@/store/modules/shelters'
+import params from '@/helpers/params.json'
 
 export default {
   name: 'Dashboard',
-  components: { VAnimalItem },
+  components: { VAnimalItem, VAnimalCardEdit },
   data() {
     return {
       shelter: null,
@@ -120,7 +136,8 @@ export default {
       sort: null,
       order: null,
 
-      importDialogVisible: false
+      importDialogVisible: false,
+      createNewCardVisible: false
     }
   },
   computed: {
@@ -134,50 +151,35 @@ export default {
       return this.module.list
     },
     isAllLoaded() {
-      return this.module.params.offset === this.module.params.count
+      return !this.loading && this.module.params.offset === this.module.params.count
     },
     infiniteScrollDisabled() {
       return this.loading || this.isAllLoaded
     },
     shelterOptions() {
-      return [
-        { value: 1, label: 'Приют 1' },
-        { value: 2, label: 'Приют 2' },
-        { value: 3, label: 'Приют 3' }
-      ]
+      return this.$store.state[SHELTERS_MODULE].list
     },
     animalOptions() {
-      return [
-        { value: 1, label: 'Собака' },
-        { value: 2, label: 'Кошка' }
-      ]
+      return params.animalCategories
     },
     sexOptions() {
-      return [
-        { value: 'male', label: 'Мальчик' },
-        { value: 'female', label: 'Девочка' }
-      ]
+      return params.sexOptions
     },
     ageOptions() {
-      return [
-        { value: 1, label: 'Молодые ( < 2 лет )' },
-        { value: 2, label: 'Средние ( 2-7 лет )' },
-        { value: 3, label: 'Пожелые ( > 7 лет )' }
-      ]
+      return params.ageOptions
     },
     socialOptions() {
       return [
-        { value: 'yes', label: 'Да' },
-        { value: 'no', label: 'Нет' }
+        { value: 'true', label: 'Да' },
+        { value: 'false', label: 'Нет' }
       ]
     },
     sizeOptions() {
-      return [
-        { value: 'small', label: 'Маленькое' },
-        { value: 'medium', label: 'Среднее' },
-        { value: 'large', label: 'Большое' }
-      ]
+      return params.sizeOptions
     }
+  },
+  created() {
+    this.fetch()
   },
   methods: {
     reset() {
@@ -212,6 +214,9 @@ export default {
     upload() {
       console.log('upload')
       this.$refs.uploadForm.submit()
+    },
+    createNewCard(data) {
+      console.log('data for creating card', data)
     },
     handleFileUploadSuccess(res, file) {
       console.log(res, file)

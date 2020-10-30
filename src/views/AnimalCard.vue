@@ -40,7 +40,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="Дата">
-          <el-date-picker v-model="newDocumentForm.date" type="date" placeholder="Укажите дату"> </el-date-picker>
+          <el-date-picker
+            v-model="newDocumentForm.date"
+            type="date"
+            placeholder="Укажите дату"
+            :picker-options="datePickerOptions"
+          />
         </el-form-item>
         <el-form-item label="Файл">
           <el-upload
@@ -66,6 +71,7 @@
 import { SET_MODEL } from '@/store/mutations/types'
 import { FETCH_ANIMAL, MODULE_NAME as ANIMAL_MODULE } from '@/store/modules/animal'
 import { FETCH_ANIMAL_ACTS, MODULE_NAME as ACTS_MODULE } from '@/store/modules/acts'
+import params from '@/helpers/params.json'
 
 export default {
   name: 'AnimalCard',
@@ -75,6 +81,11 @@ export default {
   data() {
     return {
       uploadDocumentVisible: false,
+      datePickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        }
+      },
       newDocumentForm: {
         type: null,
         date: null,
@@ -96,11 +107,7 @@ export default {
       return this.$store.state[ACTS_MODULE].loading
     },
     typeOptions() {
-      return [
-        { label: 'Акт отлова', value: '1' },
-        { label: 'Акт осмотра', value: '2' },
-        { label: 'Акт приема-передачи', value: '3' }
-      ]
+      return params.documentTypes
     }
   },
   created() {

@@ -51,17 +51,17 @@ const routes = [
       {
         path: '/acts',
         name: 'Acts',
-        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
+        component: () => import(/* webpackChunkName: "acts" */ '@/views/Acts.vue')
       },
       {
         path: '/reports',
         name: 'Reports',
-        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
+        component: () => import(/* webpackChunkName: "reports" */ '@/views/Reports.vue')
       },
       {
-        path: '/applications',
-        name: 'Applications',
-        component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
+        path: '/requests',
+        name: 'Requests',
+        component: () => import(/* webpackChunkName: "requests" */ '@/views/Requests.vue')
       },
       {
         path: '/logout',

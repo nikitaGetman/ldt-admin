@@ -1,5 +1,5 @@
 <template>
-  <el-menu :default-active="menuItems[0].path" class="navbar" router>
+  <el-menu class="navbar" router>
     <el-menu-item v-for="(item, index) of menuItems" :key="index" :index="item.path">
       <i :class="item.icon"></i>
       <span>{{ item.title }}</span>
@@ -35,7 +35,7 @@ export default {
         },
         {
           title: 'Заявки новых владельцев',
-          path: '/applications',
+          path: '/requests',
           icon: 'el-icon-s-custom'
         },
         {

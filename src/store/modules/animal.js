@@ -21,6 +21,9 @@ export default {
   actions: {
     [FETCH_ANIMALS]: ({ state, commit, getters }, searchParams = {}) => {
       const params = { ...state.params, ...searchParams }
+      if (params.offset === 0) {
+        commit(SET_LIST, { name: MODULE_NAME, list: [] })
+      }
 
       commit(LOADING, MODULE_NAME)
       return getters.apiService

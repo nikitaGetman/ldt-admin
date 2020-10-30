@@ -18,10 +18,14 @@
 
 <script>
 import TheNavbar from '@/components/TheNavbar.vue'
+import { FETCH_SHELTERS } from '@/store/modules/shelters'
 
 export default {
   name: 'AppPage',
-  components: { TheNavbar }
+  components: { TheNavbar },
+  created() {
+    this.$store.dispatch(FETCH_SHELTERS)
+  }
 }
 </script>
 

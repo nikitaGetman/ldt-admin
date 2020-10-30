@@ -3,6 +3,8 @@ import { BASE_URL } from '@/config'
 import { LOGOUT } from '@/store/actions/types'
 import store from '@/store'
 
+import shelters from './shelters'
+
 const client = axios.create({
   baseURL: BASE_URL,
   withCredentials: true
@@ -45,6 +47,16 @@ const apiService = {
     })
     // return this.client.post('/api/auth', { login, password })
   },
+  fetchShelters() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const list = shelters
+        resolve(list)
+      }, 1000)
+    })
+    // return this.client.get('/api/shelters')
+  },
+
   fetchProfile() {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -82,6 +94,16 @@ const apiService = {
       }, 3000)
     })
     // return this.client.get('/api/animal/acts', { params: { id } })
+  },
+  fetchRequests(params) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const list = [{ value: params.offset, id: params.offset, status: 'new' }]
+        const data = { list, count: 10 }
+        resolve(data)
+      }, 500)
+    })
+    // return this.client.get('/api/animals', { params })
   }
 }
 
