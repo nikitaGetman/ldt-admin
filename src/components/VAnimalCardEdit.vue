@@ -1,5 +1,11 @@
 <template>
-  <el-dialog class="animal-card-edit" :title="title" :visible.sync="localVisible" append-to-body width="50%">
+  <el-dialog
+    class="animal-card-edit"
+    :title="isEdit ? 'Редактирование карточки животного' : 'Создание карточки животного'"
+    :visible.sync="localVisible"
+    append-to-body
+    width="50%"
+  >
     <el-form ref="form" :model="form" label-width="200px" size="mini">
       <el-form-item label="Вид животного">
         <el-select v-model="form.type" placeholder="Выберите вид">
@@ -131,7 +137,7 @@ export default {
   name: 'VAnimalCardEdit',
   props: {
     visible: { type: Boolean, required: true },
-    title: { type: String, default: 'Создание карточки животного' },
+    isEdit: { type: Boolean, default: false },
     initialValues: { type: Object, default: () => ({ nickname: 'Псиныч' }) }
   },
   data() {

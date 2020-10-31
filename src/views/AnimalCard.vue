@@ -42,12 +42,7 @@
     </div>
 
     <!-- dialogs -->
-    <v-animal-card-edit
-      :visible.sync="editAnimalVisible"
-      :initial-values="animal"
-      title="Редактирование карточки животного"
-      @done="updateAnimal"
-    />
+    <v-animal-card-edit :visible.sync="editAnimalVisible" :initial-values="animal" @done="updateAnimal" />
 
     <el-dialog
       class="animal-card__upload-dialog"
@@ -58,9 +53,6 @@
     >
       <el-form label-width="120px" :model="newDocumentForm">
         <el-form-item label="Тип документа">
-          <!-- <el-select v-model="newDocumentForm.type" placeholder="Выберите тип">
-            <el-option v-for="type in typeOptions" :key="type.value" :label="type.label" :value="type.value" />
-          </el-select> -->
           <el-autocomplete
             v-model="newDocumentForm.type"
             :fetch-suggestions="autocompleteTypes"
@@ -74,6 +66,9 @@
             placeholder="Укажите дату"
             :picker-options="datePickerOptions"
           />
+        </el-form-item>
+        <el-form-item label="Комментарий">
+          <el-input v-model="newDocumentForm.body" placeholder="Дополнительная информация" />
         </el-form-item>
         <el-form-item label="Файл">
           <el-upload
@@ -224,7 +219,6 @@ export default {
 
   &__key {
     min-width: 230px;
-    // text-align: right;
   }
 }
 </style>
