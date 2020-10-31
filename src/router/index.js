@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
 
-import { createMiddlewarePipeline, notFound } from '@/router/middleware'
+import { createMiddlewarePipeline, notFound, notAuth, auth, logout } from '@/router/middleware'
 
 Vue.use(VueRouter)
 
@@ -13,7 +13,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "AuthLayout" */ '@/layouts/AppLogin'),
     redirect: { name: 'login' },
     meta: {
-      // middleware: [notAuth]
+      middleware: [notAuth]
     },
     children: [
       {
@@ -27,15 +27,48 @@ const routes = [
     path: '/',
     name: 'AppMain',
     component: () => import(/* webpackChunkName: "MainLayout" */ '@/layouts/AppMain'),
-    redirect: { name: 'summary' },
+    redirect: { name: 'AnimalsDashboard' },
     meta: {
-      // middleware: [auth]
+      middleware: [auth]
     },
     children: [
       {
-        path: '/',
-        name: 'summary',
+        path: '/animals-dashboard',
+        name: 'AnimalsDashboard',
         component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
+      },
+      {
+        path: '/animal/:id',
+        name: 'AnimalCard',
+        props: true,
+        component: () => import(/* webpackChunkName: "animal-card" */ '@/views/AnimalCard.vue')
+      },
+      {
+        path: '/dicts',
+        name: 'Dicts',
+        component: () => import(/* webpackChunkName: "dicts" */ '@/views/Dicts.vue')
+      },
+      {
+        path: '/acts',
+        name: 'Acts',
+        component: () => import(/* webpackChunkName: "acts" */ '@/views/Acts.vue')
+      },
+      {
+        path: '/reports',
+        name: 'Reports',
+        component: () => import(/* webpackChunkName: "reports" */ '@/views/Reports.vue')
+      },
+      {
+        path: '/requests',
+        name: 'Requests',
+        component: () => import(/* webpackChunkName: "requests" */ '@/views/Requests.vue')
+      },
+      {
+        path: '/logout',
+        name: 'Logout',
+        meta: {
+          middleware: [logout]
+        }
       }
     ]
   }

@@ -36,7 +36,7 @@ export default {
     [LOGIN]: ({ commit, getters }, { login, password }) => {
       commit(LOADING, MODULE_NAME)
       return getters.apiService
-        .login({ login, password })
+        .auth({ login, password })
         .then(model => {
           commit(SET_MODEL, { name: MODULE_NAME, model })
           saveStorageItem(TOKEN_KEY, model.access)

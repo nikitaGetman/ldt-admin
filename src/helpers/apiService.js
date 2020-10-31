@@ -34,7 +34,108 @@ client.interceptors.response.use(
 )
 
 const apiService = {
-  client
+  client,
+
+  auth({ login, password }) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const model = { login, password, access: 'access' }
+        resolve(model)
+      }, 1000)
+    })
+    // return this.client.post('/api/auth', { login, password })
+  },
+  fetchDicts() {
+    return this.client.get('/api/dicts')
+  },
+
+  fetchProfile() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve({ name: 'Иван', surname: 'Иванов' })
+      }, 0)
+    })
+  },
+  fetchAnimals(params) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const list = [{ value: params.offset, id: params.offset }]
+        const data = { list, count: 10 }
+        resolve(data)
+      }, 500)
+    })
+    // return this.client.get('/api/animals', { params })
+  },
+  fetchAnimal(id) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const data = {
+          id,
+          type: 'Кошка',
+          shelter: 'Приют 1',
+          arrivalDate: '12.12.2012',
+          sex: 'Мальчик',
+          breed: 'метис',
+          color: 'синий',
+          wool: 'нет',
+          tail: 'длиный',
+          ears: 'торчком',
+          cardId: '123123123',
+          size: 'Крупный',
+          age: '2014',
+          specialSigns: '',
+          nickname: 'Псиныч',
+          weight: 12,
+          readyToPickUp: false,
+          idMarker: '123123213',
+          character: 'Спокойный',
+          veterinarian: 'Петров А И',
+          cell: '20',
+          sterilized: false
+        }
+        resolve(data)
+      }, 500)
+    })
+  },
+  createAnimal(params) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(params)
+      }, 500)
+    })
+    // return this.client.post('/api/animal', { params })
+  },
+  updateAnimal(params) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(params)
+      }, 500)
+    })
+    // return this.client.put('/api/animal', { params })
+  },
+  fetchAnimalActs(id) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const list = [
+          { date: '2020-01-10', type: 'Акт отлова', link: 'files/act.xls', id: `${id}-1` },
+          { date: '2020-01-12', type: 'Акт осмотра', link: 'files/act.xls', id: `id-2` },
+          { date: '2020-03-10', type: 'Акт приема передачи', link: 'files/act.xls', id: `id-3` }
+        ]
+        resolve(list)
+      }, 3000)
+    })
+    // return this.client.get('/api/animal/acts', { params: { id } })
+  },
+  fetchRequests(params) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const list = [{ value: params.offset, id: params.offset, status: 'new' }]
+        const data = { list, count: 10 }
+        resolve(data)
+      }, 500)
+    })
+    // return this.client.get('/api/animals', { params })
+  }
 }
 
 export default apiService
