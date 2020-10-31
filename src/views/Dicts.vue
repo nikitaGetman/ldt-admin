@@ -1,27 +1,27 @@
 <template>
-  <div class="shelters">
+  <div class="dicts">
     <h3>Список приютов</h3>
 
-    <div class="shelters__table-wrapper">
-      <el-table :data="shelters" style="width: 100%" border v-loading="loading" stripe>
+    <div class="dicts__table-wrapper">
+      <!-- <el-table :data="dicts" style="width: 100%" border v-loading="loading" stripe>
         <el-table-column prop="name" label="Название"> </el-table-column>
         <el-table-column prop="adm_area" label="Округ" width="180"> </el-table-column>
         <el-table-column prop="district" label="Район" width="150"> </el-table-column>
         <el-table-column prop="chief_name" label="Ответсвенный" width="240"> </el-table-column>
         <el-table-column prop="phone" label="Телефон" width="130"> </el-table-column>
         <el-table-column prop="address" label="Адрес" width="240"> </el-table-column>
-      </el-table>
+      </el-table> -->
     </div>
   </div>
 </template>
 
 <script>
-import { FETCH_SHELTERS, MODULE_NAME as SHELTERS_MODULE } from '@/store/modules/shelters'
+import { FETCH_SHELTERS, MODULE_NAME as SHELTERS_MODULE } from '@/store/modules/dicts'
 
 export default {
-  name: 'Shelters',
+  name: 'Dicts',
   computed: {
-    shelters() {
+    dicts() {
       return this.$store.state[SHELTERS_MODULE].list
     },
     loading() {
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style lang="scss">
-.shelters {
+.dicts {
   &__table-wrapper {
     padding: 16px;
     margin-bottom: 24px;

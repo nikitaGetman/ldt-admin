@@ -4,6 +4,7 @@ import { LOGOUT } from '@/store/actions/types'
 
 export const FETCH_ANIMALS = 'fetchAnimals'
 export const FETCH_ANIMAL = 'fetchAnimal'
+export const CREATE_ANIMAL = 'createAnimal'
 
 export const MODULE_NAME = 'animal'
 
@@ -46,6 +47,13 @@ export default {
           commit(SET_MODEL, { name: MODULE_NAME, model })
         })
         .catch(throwError(commit, 'Ошибка получения данных животного (fetchAnimal)'))
+        .finally(() => commit(LOADED, MODULE_NAME))
+    },
+    [CREATE_ANIMAL]: ({ commit, getters }, params) => {
+      commit(LOADING, MODULE_NAME)
+      return getters.apiService
+        .createAnimal(params)
+        .catch(throwError(commit, 'Ошибка создания карточки животного (createAnimal)'))
         .finally(() => commit(LOADED, MODULE_NAME))
     },
     [LOGOUT]: ({ commit }) => {

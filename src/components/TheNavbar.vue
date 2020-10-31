@@ -19,8 +19,8 @@ export default {
           icon: 'el-icon-s-order'
         },
         {
-          title: 'Приюты',
-          path: '/shelters',
+          title: 'Справочники',
+          path: '/dicts',
           icon: 'el-icon-s-home'
         },
         {

@@ -1,6 +1,6 @@
 <template>
   <div class="animal-card">
-    This is animal {{ id }}
+    <el-page-header @back="goBack" content="Карточка животного" title="Назад" />
 
     <div class="animal-card__history-wrapper">
       <el-row type="flex" justify="space-between">
@@ -124,7 +124,10 @@ export default {
     downloadFile(act) {
       console.log('downloading', act)
     },
-    addDocument() {}
+    addDocument() {},
+    goBack() {
+      this.$router.push({ name: 'AnimalDashboard' })
+    }
   }
 }
 </script>

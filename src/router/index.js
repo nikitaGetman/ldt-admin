@@ -44,9 +44,9 @@ const routes = [
         component: () => import(/* webpackChunkName: "animal-card" */ '@/views/AnimalCard.vue')
       },
       {
-        path: '/shelters',
-        name: 'Shelters',
-        component: () => import(/* webpackChunkName: "shelters" */ '@/views/Shelters.vue')
+        path: '/dicts',
+        name: 'Dicts',
+        component: () => import(/* webpackChunkName: "dicts" */ '@/views/Dicts.vue')
       },
       {
         path: '/acts',

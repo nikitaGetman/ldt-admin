@@ -1,20 +1,20 @@
 <template>
   <el-dialog class="animal-card-edit" :title="title" :visible.sync="localVisible" append-to-body width="50%">
-    <el-form ref="form" :model="form" label-width="200px">
-      <el-form-item label="Категория">
-        <el-select v-model="form.type" placeholder="Выберите категорию">
-          <el-option
-            v-for="item in params.animalCategories"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+    <el-form ref="form" :model="form" label-width="200px" size="mini">
+      <el-form-item label="Вид животного">
+        <el-select v-model="form.type" placeholder="Выберите вид">
+          <el-option v-for="item in params.animalTypes" :key="item.key" :label="item.value" :value="item.value" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="Приют">
         <el-select v-model="form.shelter" placeholder="Выберите приют">
-          <el-option v-for="item in shelterOptions" :key="item.id" :label="item.name" :value="item.id" />
+          <el-option
+            v-for="(item, index) in shelterOptions"
+            :key="index"
+            :label="item.shortName"
+            :value="item.shortName"
+          />
         </el-select>
       </el-form-item>
 
@@ -29,23 +29,37 @@
 
       <el-form-item label="Пол">
         <el-select v-model="form.sex" placeholder="Укажите пол">
-          <el-option v-for="item in params.sexOptions" :key="item.value" :label="item.label" :value="item.value">
-            {{ item.label }} <i :class="item.icon"></i>
-          </el-option>
+          <el-option v-for="(item, index) in params.animalSex" :key="index" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="Порода">
-        <el-input v-model="form.breed" placeholder="Укажите породу" />
+        <el-select v-model="form.breed" placeholder="Укажите породу">
+          <el-option v-for="(item, index) in filteredBreeds" :key="index" :label="item" :value="item" />
+        </el-select>
       </el-form-item>
 
       <el-form-item label="Окрас">
-        <el-input v-model="form.color" placeholder="Укажите окрас" />
+        <el-select v-model="form.color" placeholder="Укажите окрас">
+          <el-option v-for="(item, index) in filteredColors" :key="index" :label="item" :value="item" />
+        </el-select>
       </el-form-item>
 
-      <el-form-item label="Размер">
-        <el-select v-model="form.size" placeholder="Укажите размер">
-          <el-option v-for="item in params.sizeOptions" :key="item.value" :label="item.label" :value="item.value" />
+      <el-form-item label="Тип шерсти">
+        <el-select v-model="form.wool" placeholder="Укажите тип шерсти">
+          <el-option v-for="(item, index) in filteredWools" :key="index" :label="item" :value="item" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="Тип ушей">
+        <el-select v-model="form.ears" placeholder="Укажите тип ушей">
+          <el-option v-for="(item, index) in params.earsTypes" :key="index" :label="item" :value="item" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="Тип хвоста">
+        <el-select v-model="form.tail" placeholder="Укажите тип хвоста">
+          <el-option v-for="(item, index) in params.tailTypes" :key="index" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
@@ -57,6 +71,10 @@
         <el-input v-model="form.specialSigns" placeholder="Опишите особые приметы" :rows="2" type="textarea" />
       </el-form-item>
 
+      <el-form-item label="Характер">
+        <el-input v-model="form.character" placeholder="Укажите характер" />
+      </el-form-item>
+
       <el-form-item label="Кличка">
         <el-input v-model="form.nickname" placeholder="Укажите кличку" />
       </el-form-item>
@@ -65,16 +83,24 @@
         <el-input v-model="form.weight" placeholder="Укажите вес" type="number" min="0" />
       </el-form-item>
 
-      <el-form-item label="Готово к социализации">
-        <el-switch v-model="form.readyToPickUp"></el-switch>
+      <el-form-item label="Стерилизовано">
+        <el-switch v-model="form.sterilized"></el-switch>
+      </el-form-item>
+
+      <el-form-item label="ФИО Ветеринара">
+        <el-input v-model="form.veterinarian" placeholder="Укажите ФИО ветеринара" />
+      </el-form-item>
+
+      <el-form-item label="Клетка">
+        <el-input v-model="form.cell" placeholder="Укажите клетку" type="number" min="0" />
       </el-form-item>
 
       <el-form-item label="Идентификационная метка">
-        <el-input v-model="form.idMarker" placeholder="Укажите при наличии" :rows="2" type="textarea" />
+        <el-input v-model="form.idMarker" placeholder="Укажите при наличии" />
       </el-form-item>
 
-      <el-form-item label="ГСИЦ">
-        <el-input v-model="form.registrationNumber" placeholder="Укажите при наличии" />
+      <el-form-item label="Готово к социализации">
+        <el-switch v-model="form.readyToPickUp"></el-switch>
       </el-form-item>
 
       <el-form-item label="Фотографии">
@@ -98,34 +124,8 @@
 </template>
 
 <script>
-/*
-
-Категория животного: (собака / кошка )
-Приют
-Дата поступления в приют
-Пол: (кабель / сука / кот / кошка)
-Порода 
-Окрас
-Размер
-Возраст (примерный)
-Особые приметы
-Кличка
-Вес
-Готово к социализации
-Идентификационная метка (способ и место нанесения)
-Государственный регистрационный номер ГСИЦ
-Фотосы
-
-
-Дата стерилизации
-ФИО врача произведшего стерилизацию
-Шерсть
-Уши
-Хвост
-
-*/
 import { MODULE_NAME as SHELTERS_MODULE } from '@/store/modules/shelters'
-import params from '@/helpers/params.json'
+import { MODULE_NAME as DICTS_MODULE } from '@/store/modules/dicts'
 
 export default {
   name: 'VAnimalCardEdit',
@@ -136,7 +136,6 @@ export default {
   },
   data() {
     return {
-      params,
       localVisible: false,
       datePickerOptions: {
         disabledDate(time) {
@@ -148,8 +147,12 @@ export default {
         shelter: null,
         arrivalDate: null,
         sex: null,
-        breed: '',
-        color: '',
+        breed: null,
+        color: null,
+        wool: null,
+        tail: null,
+        ears: null,
+        cardId: null,
         size: null,
         age: null,
         specialSigns: '',
@@ -157,13 +160,31 @@ export default {
         weight: null,
         readyToPickUp: false,
         idMarker: null,
-        registrationNumber: null
+        character: null,
+        veterinarian: null,
+        cell: null,
+        sterilized: false
       }
     }
   },
   computed: {
     shelterOptions() {
       return this.$store.state[SHELTERS_MODULE].list
+    },
+    params() {
+      return this.$store.state[DICTS_MODULE].model
+    },
+    filteredBreeds() {
+      const type = this.type || 'dog'
+      return this.params.breed ? this.params.breed[type] : []
+    },
+    filteredColors() {
+      const type = this.type || 'dog'
+      return this.params.color ? this.params.color[type] : []
+    },
+    filteredWools() {
+      const type = this.type || 'dog'
+      return this.params.woolTypes ? this.params.woolTypes[type] : []
     }
   },
   watch: {
