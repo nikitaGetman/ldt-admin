@@ -69,7 +69,30 @@ const apiService = {
   fetchAnimal(id) {
     return new Promise(resolve => {
       setTimeout(() => {
-        const data = { id }
+        const data = {
+          id,
+          type: 'Кошка',
+          shelter: 'Приют 1',
+          arrivalDate: '12.12.2012',
+          sex: 'Мальчик',
+          breed: 'метис',
+          color: 'синий',
+          wool: 'нет',
+          tail: 'длиный',
+          ears: 'торчком',
+          cardId: '123123123',
+          size: 'Крупный',
+          age: '2014',
+          specialSigns: '',
+          nickname: 'Псиныч',
+          weight: 12,
+          readyToPickUp: false,
+          idMarker: '123123213',
+          character: 'Спокойный',
+          veterinarian: 'Петров А И',
+          cell: '20',
+          sterilized: false
+        }
         resolve(data)
       }, 500)
     })

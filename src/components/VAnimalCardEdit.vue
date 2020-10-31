@@ -3,7 +3,7 @@
     <el-form ref="form" :model="form" label-width="200px" size="mini">
       <el-form-item label="Вид животного">
         <el-select v-model="form.type" placeholder="Выберите вид">
-          <el-option v-for="item in params.animalTypes" :key="item.key" :label="item.value" :value="item.value" />
+          <el-option v-for="item in params.animalTypes" :key="item.key" :label="item.value" :value="item.key" />
         </el-select>
       </el-form-item>
 
@@ -175,15 +175,15 @@ export default {
       return this.$store.state[DICTS_MODULE].model
     },
     filteredBreeds() {
-      const type = this.type || 'dog'
+      const type = this.form.type || 'dog'
       return this.params.breed ? this.params.breed[type] : []
     },
     filteredColors() {
-      const type = this.type || 'dog'
+      const type = this.form.type || 'dog'
       return this.params.color ? this.params.color[type] : []
     },
     filteredWools() {
-      const type = this.type || 'dog'
+      const type = this.form.type || 'dog'
       return this.params.woolTypes ? this.params.woolTypes[type] : []
     }
   },
