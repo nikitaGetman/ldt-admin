@@ -1,15 +1,7 @@
 <template>
   <el-collapse class="animal-item">
     <el-collapse-item>
-      <template slot="title">Animal Card {{ animal.value }}</template>
-      <div>
-        Consistent with real life: in line with the process and logic of real life, and comply with languages and habits
-        that the users are used to;
-      </div>
-      <div>
-        Consistent within interface: all elements should be consistent, such as: design style, icons and texts, position
-        of elements, etc.
-      </div>
+      <template slot="title">Карточка животного № {{ animal.idcard }}, {{ animal.nickname }}</template>
 
       <el-link type="primary" :underline="false" @click="toAnimalCard">К карточке животного</el-link>
     </el-collapse-item>

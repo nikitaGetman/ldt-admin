@@ -5,6 +5,8 @@ import { LOGOUT } from '@/store/actions/types'
 export const FETCH_ANIMALS = 'fetchAnimals'
 export const FETCH_ANIMAL = 'fetchAnimal'
 export const CREATE_ANIMAL = 'createAnimal'
+export const ADD_ANIMAL_DOC = 'addDocument'
+export const EXPORT_ANIMAL_CARD = 'exportAnimalCard'
 
 export const MODULE_NAME = 'animal'
 
@@ -29,7 +31,9 @@ export default {
       commit(LOADING, MODULE_NAME)
       return getters.apiService
         .fetchAnimals(params)
-        .then(({ list, count }) => {
+        .then(response => {
+          const list = response[0]
+          const count = response[1]
           commit(SET_LIST, { name: MODULE_NAME, list: [...state.list, ...list] })
           commit(UPDATE_PARAMS, {
             name: MODULE_NAME,
@@ -54,6 +58,24 @@ export default {
       return getters.apiService
         .createAnimal(params)
         .catch(throwError(commit, 'Ошибка создания карточки животного (createAnimal)'))
+        .finally(() => commit(LOADED, MODULE_NAME))
+    },
+    [EXPORT_ANIMAL_CARD]: ({ commit, getters }, id) => {
+      commit(LOADING, MODULE_NAME)
+      return getters.apiService
+        .exportAnimalCard(id)
+        .catch(throwError(commit, 'Ошибка экспорта карточки (exportAnimalCard)'))
+        .finally(() => commit(LOADED, MODULE_NAME))
+    },
+    [ADD_ANIMAL_DOC]: ({ commit, getters }, params) => {
+      commit(LOADING, MODULE_NAME)
+      return getters.apiService
+        .addAnimalDoc(params)
+        .then(response => {
+          console.log(response)
+          // commit(re, { name: MODULE_NAME, model })
+        })
+        .catch(throwError(commit, 'Ошибка экспорта карточки (exportAnimalCard)'))
         .finally(() => commit(LOADED, MODULE_NAME))
     },
     [LOGOUT]: ({ commit }) => {

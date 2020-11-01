@@ -33,16 +33,19 @@ export default {
   methods: {
     auth() {
       const { login, password } = this
+      const logins = ['1', '2', '3', '4']
 
       if (login && password) {
-        this.$store
-          .dispatch(LOGIN, { login, password })
-          .then(() => {
-            this.$router.push({ name: 'AnimalsDashboard' })
-          })
-          .catch(err => {
-            this.error = err
-          })
+        if (logins.includes(login)) {
+          this.$store
+            .dispatch(LOGIN, { login, password })
+            .then(() => {
+              this.$router.push({ name: 'AnimalsDashboard' })
+            })
+            .catch(err => {
+              this.error = err
+            })
+        }
       }
     }
   }

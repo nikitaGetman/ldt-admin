@@ -15,12 +15,7 @@
 
       <el-form-item label="Приют">
         <el-select v-model="form.shelter" placeholder="Выберите приют">
-          <el-option
-            v-for="(item, index) in shelterOptions"
-            :key="index"
-            :label="item.shortName"
-            :value="item.shortName"
-          />
+          <el-option v-for="(item, index) in shelterOptions" :key="index" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
 
@@ -59,13 +54,13 @@
 
       <el-form-item label="Тип ушей">
         <el-select v-model="form.ears" placeholder="Укажите тип ушей">
-          <el-option v-for="(item, index) in params.earsTypes" :key="index" :label="item" :value="item" />
+          <el-option v-for="(item, index) in params.earType" :key="index" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
       <el-form-item label="Тип хвоста">
         <el-select v-model="form.tail" placeholder="Укажите тип хвоста">
-          <el-option v-for="(item, index) in params.tailTypes" :key="index" :label="item" :value="item" />
+          <el-option v-for="(item, index) in params.tailType" :key="index" :label="item" :value="item" />
         </el-select>
       </el-form-item>
 
@@ -124,7 +119,7 @@
     </el-form>
     <div slot="footer">
       <el-button @click="localVisible = false">Отмена</el-button>
-      <el-button type="primary" @click="create">Добавить</el-button>
+      <el-button type="primary" @click="create">{{ isEdit ? 'Обновить' : 'Добавить' }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -138,7 +133,7 @@ export default {
   props: {
     visible: { type: Boolean, required: true },
     isEdit: { type: Boolean, default: false },
-    initialValues: { type: Object, default: () => ({ nickname: 'Псиныч' }) }
+    initialValues: { type: Object, default: () => ({}) }
   },
   data() {
     return {
@@ -197,7 +192,8 @@ export default {
     visible: {
       handler(val) {
         this.localVisible = val
-        this.form = { ...this.form, ...this.initialValues }
+
+        this.setInitialValues()
       },
       immediate: true
     },
@@ -210,6 +206,37 @@ export default {
   methods: {
     create() {
       this.$emit('done', { ...this.form, photos: this.$refs.photosUpload.uploadFiles })
+    },
+    setInitialValues() {
+      const resValues = { ...this.initialValues }
+      const keysMap = {
+        animal_type: 'type',
+        male: 'sex',
+        ready: 'readyToPickUp',
+        animal_breed: 'breed'
+      }
+
+      Object.entries(this.initialValues).forEach(([key, value]) => {
+        const k = keysMap[key]
+
+        let lValue = value
+
+        if (key === 'ready') {
+          lValue = value ? 'Да' : 'Нет'
+        }
+        if (key === 'male') {
+          lValue = value ? 'Мальчик' : 'Девочка'
+        }
+        if (key === 'animal_type') {
+          lValue = value === 1 ? 'Кошка' : 'Собака'
+        }
+        if (key === 'animal_breed') {
+          lValue = this.params.breed[value - 800]
+        }
+        resValues[k] = lValue
+      })
+
+      this.form = { ...this.form, ...resValues }
     }
   }
 }

@@ -30,6 +30,18 @@ export default {
       return {
         Authorization: 'Bearer ' + state.model.access
       }
+    },
+    isDzhkh: state => {
+      return state.model.access === '1'
+    },
+    isPrefecture: state => {
+      return state.model.access === '2'
+    },
+    isExploiting: state => {
+      return state.model.access === '3'
+    },
+    isShelter: state => {
+      return state.model.access === '4'
     }
   },
   actions: {
@@ -39,17 +51,21 @@ export default {
         .auth({ login, password })
         .then(model => {
           commit(SET_MODEL, { name: MODULE_NAME, model })
-          saveStorageItem(TOKEN_KEY, model.access)
+          saveStorageItem(TOKEN_KEY, login)
         })
         .catch(throwError(commit, 'Ошибка входа (login)'))
         .finally(() => commit(LOADED, MODULE_NAME))
     },
-    [FETCH_PROFILE]: ({ commit, getters }) => {
+    [FETCH_PROFILE]: ({ state, commit, getters }) => {
       commit(LOADING, MODULE_NAME)
       return getters.apiService
         .fetchProfile()
         .then(model => {
-          commit(UPDATE_MODEL, { name: MODULE_NAME, model })
+          const userNames = ['ДЖКХ', 'Префектура', 'Управляющая компания', 'Приют']
+          commit(UPDATE_MODEL, {
+            name: MODULE_NAME,
+            model: { ...model, name: userNames[parseInt(state.model.access) - 1] }
+          })
         })
         .catch(throwError(commit, 'Ошибка получения профиля (fetchProfile)'))
         .finally(() => commit(LOADED, MODULE_NAME))

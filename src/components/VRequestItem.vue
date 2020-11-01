@@ -1,6 +1,6 @@
 <template>
   <el-collapse class="request-item">
-    <el-collapse-item>
+    <el-collapse-item v-loading="loading">
       <template slot="title">
         <span :class="`request-item__status request-item__status--${request.status}`">{{ requestStatus }} </span>
 
@@ -24,10 +24,10 @@
 
       <el-row type="flex" justify="end">
         <el-col :span="3">
-          <el-button type="danger" plain @click="decline">Отклонить</el-button>
+          <el-button type="danger" plain @click="dodecline">Отклонить</el-button>
         </el-col>
         <el-col :span="3">
-          <el-button type="primary" plain @click="accept">Одобрить</el-button>
+          <el-button type="primary" plain @click="doaccept">Одобрить</el-button>
         </el-col>
       </el-row>
     </el-collapse-item>
@@ -39,6 +39,11 @@ export default {
   name: 'VRequestItem',
   props: {
     request: { type: Object, required: true }
+  },
+  data() {
+    return {
+      loading: false
+    }
   },
   computed: {
     requestStatus() {
@@ -54,7 +59,29 @@ export default {
       return `${this.request.animal.type}, ${this.request.animal.cardTd}`
     }
   },
-  methods: {}
+  methods: {
+    dodecline() {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+        this.$notify({
+          title: 'Заявка отклонена',
+          type: 'warning'
+        })
+      }, 1000)
+    },
+
+    doaccept() {
+      this.loading = true
+      setTimeout(() => {
+        this.loading = false
+        this.$notify({
+          title: 'Заявка отклонена',
+          type: 'success'
+        })
+      }, 1000)
+    }
+  }
 }
 </script>
 

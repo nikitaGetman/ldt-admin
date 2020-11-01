@@ -6,13 +6,8 @@
       <div class="dashboard__main-filters">
         <el-row class="dashboard__filter-row" :gutter="20">
           <el-col :span="6">
-            <el-select v-model="shelter" clearable placeholder="Приют">
-              <el-option
-                v-for="(item, index) in shelterOptions"
-                :key="index"
-                :label="item.shortName"
-                :value="item.shortName"
-              />
+            <el-select v-model="shelter" clearable placeholder="Приют" :disabled="isShelterRole">
+              <el-option v-for="(item, index) in shelterOptions" :key="index" :label="item.name" :value="item.id" />
             </el-select>
           </el-col>
 
@@ -60,7 +55,12 @@
 
               <el-col :span="3">
                 <el-select v-model="breed" clearable placeholder="Порода">
-                  <el-option v-for="(item, index) in filteredBreeds" :key="index" :label="item" :value="item" />
+                  <el-option
+                    v-for="(item, index) in filteredBreeds"
+                    :key="index"
+                    :label="item.breed"
+                    :value="item.id"
+                  />
                 </el-select>
               </el-col>
 
@@ -140,8 +140,8 @@
 import VAnimalItem from '@/components/VAnimalItem.vue'
 import VAnimalCardEdit from '@/components/VAnimalCardEdit.vue'
 import { FETCH_ANIMALS, CREATE_ANIMAL, MODULE_NAME as ANIMALS_MODULE } from '@/store/modules/animal'
-import { MODULE_NAME as SHELTERS_MODULE } from '@/store/modules/shelters'
-import { MODULE_NAME as DICTS_MODULE } from '@/store/modules/dicts'
+
+import { FETCH_BREEDS, FETCH_SHELTERS, MODULE_NAME as DICTS_MODULE } from '@/store/modules/dicts'
 import paramsData from '@/helpers/params.json'
 
 export default {
@@ -190,8 +190,17 @@ export default {
     infiniteScrollDisabled() {
       return this.loading || this.isAllLoaded
     },
+    isShelterRole() {
+      return this.$store.getters.isShelter
+    },
     shelterOptions() {
-      return this.$store.state[SHELTERS_MODULE].list
+      const shelters = this.$store.state[DICTS_MODULE].model.shelters
+
+      if (this.isShelterRole) {
+        return shelters.slice(0, 1)
+      }
+
+      return shelters
     },
     params() {
       return this.$store.state[DICTS_MODULE].model
@@ -212,8 +221,7 @@ export default {
       return this.params.operatingOrganizations
     },
     filteredBreeds() {
-      const type = this.type || 'dog'
-      return this.params.breed ? this.params.breed[type] : []
+      return this.params._animalBreeds
     },
     filteredColors() {
       const type = this.type || 'dog'
@@ -239,7 +247,16 @@ export default {
       return paramsData.exitTypes
     }
   },
+  watch: {
+    shelterOptions() {}
+  },
   created() {
+    this.$store.dispatch(FETCH_SHELTERS).then(() => {
+      if (this.isShelterRole) {
+        this.shelter = this.shelterOptions[0]
+      }
+    })
+    this.$store.dispatch(FETCH_BREEDS)
     this.fetch()
   },
   methods: {
@@ -314,6 +331,7 @@ export default {
     },
     createNewCard(data) {
       this.$store.dispatch(CREATE_ANIMAL, { data })
+      this.createNewCardVisible = false
     }
   }
 }

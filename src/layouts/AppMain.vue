@@ -1,7 +1,10 @@
 <template>
   <el-container class="main main__section">
     <el-header class="main__header">
-      <span>Животные без владельцев</span>
+      <div class="main__header-wraper">
+        <span>Животные без владельцев</span>
+        <span class="main__username">{{ username }}</span>
+      </div>
     </el-header>
     <el-container class="main__section">
       <el-aside width="240px">
@@ -20,11 +23,17 @@
 import TheNavbar from '@/components/TheNavbar.vue'
 import { FETCH_DICTS, MODULE_NAME as DICTS_MODULE } from '@/store/modules/dicts'
 import { MODULE_NAME as SHELTERS_MODULE } from '@/store/modules/shelters'
+import { MODULE_NAME as USERS_MODULE } from '@/store/modules/user'
 import { SET_LIST } from '@/store/mutations/types'
 
 export default {
   name: 'AppPage',
   components: { TheNavbar },
+  computed: {
+    username() {
+      return this.$store.state[USERS_MODULE].model.name
+    }
+  },
   created() {
     this.$store.dispatch(FETCH_DICTS).then(() => {
       const shelters = this.$store.state[DICTS_MODULE].model.shelters
@@ -43,6 +52,12 @@ export default {
     align-items: center;
     background-color: #54a8ff;
     color: #ffffff;
+  }
+
+  &__header-wraper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
   }
 
   &__content {
