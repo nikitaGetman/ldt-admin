@@ -3,6 +3,8 @@ import { BASE_URL } from '@/config'
 import { LOGOUT } from '@/store/actions/types'
 import store from '@/store'
 
+import dicts from './dicts.json'
+
 const client = axios.create({
   baseURL: BASE_URL,
   withCredentials: true
@@ -46,7 +48,12 @@ const apiService = {
     // return this.client.post('/api/auth', { login, password })
   },
   fetchDicts() {
-    return this.client.get('/api/dicts')
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(dicts)
+      }, 0)
+    })
+    // return this.client.get('/api/dicts')
   },
 
   fetchProfile() {
@@ -129,7 +136,9 @@ const apiService = {
   fetchRequests(params) {
     return new Promise(resolve => {
       setTimeout(() => {
-        const list = [{ value: params.offset, id: params.offset, status: 'new' }]
+        const list = [
+          { id: params.offset, status: 'new', phone: '+7(213)1232123', name: 'Петр', animal: { cardId: '123321' } }
+        ]
         const data = { list, count: 10 }
         resolve(data)
       }, 500)

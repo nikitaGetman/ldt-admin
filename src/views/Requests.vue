@@ -6,7 +6,7 @@
       <el-row class="requests__filter-row" :gutter="20">
         <el-col :span="8">
           <el-select v-model="shelter" clearable placeholder="Приют">
-            <el-option v-for="item in shelterOptions" :key="item.id" :label="item.name" :value="item.id" />
+            <el-option v-for="item in shelterOptions" :key="item.id" :label="item.shortName" :value="item.shortName" />
           </el-select>
         </el-col>
 

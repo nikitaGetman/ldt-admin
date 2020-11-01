@@ -1,15 +1,35 @@
 <template>
   <el-collapse class="request-item">
     <el-collapse-item>
-      <template slot="title">Request Card {{ request.value }}</template>
-      <div>
-        Consistent with real life: in line with the process and logic of real life, and comply with languages and habits
-        that the users are used to;
-      </div>
-      <div>
-        Consistent within interface: all elements should be consistent, such as: design style, icons and texts, position
-        of elements, etc.
-      </div>
+      <template slot="title">
+        <span :class="`request-item__status request-item__status--${request.status}`">{{ requestStatus }} </span>
+
+        <span class="request-item__title"> Запрос № {{ request.id }} </span>
+
+        <span class="request-item__key">Интересующее животное:</span>
+        <span class="request">{{ animalData }}</span>
+      </template>
+
+      <el-row>
+        <el-col :span="3">
+          <span class="request-item__key">Имя:</span>
+          <span class="request-item__value">{{ request.name }}</span>
+        </el-col>
+
+        <el-col :span="4">
+          <span class="request-item__key">Телефон:</span>
+          <span class="request-item__value">{{ request.phone }}</span>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex" justify="end">
+        <el-col :span="3">
+          <el-button type="danger" plain @click="decline">Отклонить</el-button>
+        </el-col>
+        <el-col :span="3">
+          <el-button type="primary" plain @click="accept">Одобрить</el-button>
+        </el-col>
+      </el-row>
     </el-collapse-item>
   </el-collapse>
 </template>
@@ -19,6 +39,20 @@ export default {
   name: 'VRequestItem',
   props: {
     request: { type: Object, required: true }
+  },
+  computed: {
+    requestStatus() {
+      const statusMap = {
+        new: 'Новая',
+        declined: 'Отклонена',
+        accepted: 'Принята'
+      }
+      return statusMap[this.request.status]
+    },
+    animalData() {
+      return 'Кошка, Маруся, Номер карточки: 231-32'
+      return `${this.request.animal.type}, ${this.request.animal.cardTd}`
+    }
   },
   methods: {}
 }
@@ -36,9 +70,34 @@ export default {
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.25);
   }
 
+  &__status {
+    display: inline-block;
+    margin-right: 8px;
+
+    &--new {
+      color: #eade46;
+    }
+    &--declined {
+      color: red;
+    }
+    &--accepted {
+      color: green;
+    }
+  }
+
   .el-collapse-item__header,
   .el-collapse-item__wrap {
     border: none;
+  }
+
+  &__title {
+    display: inline-block;
+    margin-right: 18px;
+  }
+
+  &__key {
+    display: inline-block;
+    margin-right: 8px;
   }
 }
 </style>

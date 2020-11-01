@@ -24,7 +24,7 @@ export default {
           icon: 'el-icon-s-home'
         },
         {
-          title: 'Акты',
+          title: 'Документы',
           path: '/acts',
           icon: 'el-icon-document'
         },

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { FETCH_SHELTERS, MODULE_NAME as SHELTERS_MODULE } from '@/store/modules/dicts'
+import { FETCH_DICTS, MODULE_NAME as SHELTERS_MODULE } from '@/store/modules/dicts'
 
 export default {
   name: 'Dicts',
@@ -29,7 +29,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch(FETCH_SHELTERS)
+    this.$store.dispatch(FETCH_DICTS)
   }
 }
 </script>

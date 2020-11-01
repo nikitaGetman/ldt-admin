@@ -71,24 +71,18 @@
               </el-col>
 
               <el-col :span="3">
-                <el-select v-model="wool" clearable placeholder="Тип шерсти">
-                  <el-option v-for="(item, index) in filteredWools" :key="index" :label="item" :value="item" />
+                <el-select v-model="size" clearable placeholder="Размер">
+                  <el-option v-for="item in sizeOptions" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
               </el-col>
 
-              <el-col :span="3">
-                <el-select v-model="ears" clearable placeholder="Тип ушей">
-                  <el-option v-for="(item, index) in earsTypes" :key="index" :label="item" :value="item" />
+              <el-col :span="5">
+                <el-select v-model="exitReason" clearable placeholder="Причина выбытия">
+                  <el-option v-for="(item, index) in exitTypes" :key="index" :label="item" :value="item" />
                 </el-select>
               </el-col>
 
-              <el-col :span="3">
-                <el-select v-model="tail" clearable placeholder="Тип хвоста">
-                  <el-option v-for="(item, index) in tailTypes" :key="index" :label="item" :value="item" />
-                </el-select>
-              </el-col>
-
-              <el-col :span="3">
+              <el-col :span="4">
                 <el-select v-model="age" clearable placeholder="Возраст">
                   <el-option v-for="item in ageOptions" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
@@ -97,17 +91,26 @@
 
             <el-row class="dashboard__filter-row" :gutter="20">
               <el-col :span="4">
-                <el-select v-model="size" clearable placeholder="Размер">
-                  <el-option v-for="item in sizeOptions" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-              </el-col>
-
-              <el-col :span="4">
                 <el-input placeholder="ID карточки" v-model="cardId" clearable />
               </el-col>
 
               <el-col :span="4">
+                <el-input placeholder="ID метка" v-model="idMarker" clearable />
+              </el-col>
+
+              <el-col :span="4">
                 <el-input placeholder="Кличка" v-model="nickname" clearable />
+              </el-col>
+
+              <el-col :span="12">
+                <el-date-picker
+                  v-model="arrivePeriod"
+                  type="daterange"
+                  range-separator=""
+                  start-placeholder="Период регистрации"
+                  end-placeholder="До"
+                >
+                </el-date-picker>
               </el-col>
             </el-row>
           </el-collapse-item>
@@ -160,6 +163,9 @@ export default {
       size: null,
       cardId: null,
       nickname: null,
+      exitReason: null,
+      idMarker: null,
+      arrivePeriod: null,
 
       sort: null,
       order: null,
@@ -228,6 +234,9 @@ export default {
     },
     sizeOptions() {
       return paramsData.sizeOptions
+    },
+    exitTypes() {
+      return paramsData.exitTypes
     }
   },
   created() {
@@ -249,6 +258,9 @@ export default {
       this.wool = null
       this.tail = null
       this.ears = null
+      this.idMarker = null
+      this.exitReason = null
+      this.arrivePeriod = null
       this.sort = null
       this.order = null
     },
@@ -261,6 +273,8 @@ export default {
         readyToPickUp,
         organization,
         nickname,
+        exitReason,
+        idMarker,
         breed,
         color,
         wool,
@@ -268,6 +282,7 @@ export default {
         ears,
         cardId,
         size,
+        arrivePeriod,
         sort,
         order
       } = this
@@ -282,8 +297,11 @@ export default {
         breed,
         color,
         wool,
+        arrivePeriod,
         tail,
         ears,
+        exitReason,
+        idMarker,
         cardId,
         size,
         sort,
