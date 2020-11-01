@@ -2,7 +2,7 @@
   <el-collapse class="request-item">
     <el-collapse-item v-loading="loading">
       <template slot="title">
-        <span :class="`request-item__status request-item__status--${request.status}`">{{ requestStatus }} </span>
+        <span :class="`request-item__status request-item__status--${status}`">{{ requestStatus }} </span>
 
         <span class="request-item__title"> Запрос № {{ request.id }} </span>
 
@@ -42,7 +42,8 @@ export default {
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      status: 'new'
     }
   },
   computed: {
@@ -55,8 +56,7 @@ export default {
       return statusMap[this.request.status]
     },
     animalData() {
-      return 'Кошка, Маруся, Номер карточки: 231-32'
-      return `${this.request.animal.type}, ${this.request.animal.cardTd}`
+      return `Собака, ${this.request.animal.idcard}`
     }
   },
   methods: {
