@@ -26,11 +26,11 @@ export default {
       commit(LOADING, MODULE_NAME)
       return getters.apiService
         .fetchRequests(params)
-        .then(({ list, count }) => {
+        .then(list => {
           commit(SET_LIST, { name: MODULE_NAME, list: [...state.list, ...list] })
           commit(UPDATE_PARAMS, {
             name: MODULE_NAME,
-            params: { offset: params.offset + list.length, count }
+            params: { offset: params.offset + list.length }
           })
         })
         .catch(throwError(commit, 'Ошибка получения списка заявок (fetchRequests)'))

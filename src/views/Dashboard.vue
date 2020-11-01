@@ -197,7 +197,7 @@ export default {
       const shelters = this.$store.state[DICTS_MODULE].model.shelters
 
       if (this.isShelterRole) {
-        return shelters.slice(0, 1)
+        return shelters && shelters.length ? shelters.slice(0, 1) : []
       }
 
       return shelters
@@ -247,13 +247,10 @@ export default {
       return paramsData.exitTypes
     }
   },
-  watch: {
-    shelterOptions() {}
-  },
   created() {
     this.$store.dispatch(FETCH_SHELTERS).then(() => {
       if (this.isShelterRole) {
-        this.shelter = this.shelterOptions[0]
+        this.shelter = this.shelterOptions[0].id
       }
     })
     this.$store.dispatch(FETCH_BREEDS)

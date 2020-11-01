@@ -37,7 +37,7 @@
         <el-timeline-item v-for="(act, index) of acts" :key="index" :timestamp="act.date" placement="top">
           <p>
             <span class="animal-card__history-title"> {{ act.title }} {{ act.body ? ` - ${act.body}` : '' }} </span>
-            <span class="animal-card__history-link">
+            <span class="animal-card__history-link" v-if="act.link">
               <el-link type="primary" :underline="false" @click="downloadFile(act)">Скачать документ</el-link>
             </span>
           </p>

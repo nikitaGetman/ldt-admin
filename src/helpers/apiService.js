@@ -3,8 +3,6 @@ import { BASE_URL } from '@/config'
 import { LOGOUT } from '@/store/actions/types'
 import store from '@/store'
 
-import dicts from './dicts.json'
-
 const client = axios.create({
   baseURL: BASE_URL,
   withCredentials: true
@@ -120,7 +118,9 @@ const apiService = {
     // })
     const lParams = { ...params.data }
     // lParams.shelter = 1
-    lParams.animal_breed = 535
+    lParams.cardId = '12301-12'
+    lParams.size = 'Маленький'
+    lParams.animal_breed = 806
     lParams.animal_type = 2
     return this.client.post('/api/animals', lParams)
   },

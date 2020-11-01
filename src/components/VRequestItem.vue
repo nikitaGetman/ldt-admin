@@ -2,7 +2,7 @@
   <el-collapse class="request-item">
     <el-collapse-item v-loading="loading">
       <template slot="title">
-        <span :class="`request-item__status request-item__status--${status}`">{{ requestStatus }} </span>
+        <span :class="`request-item__status request-item__status--${status}`">{{ status }} </span>
 
         <span class="request-item__title"> Запрос № {{ request.id }} </span>
 
@@ -56,13 +56,14 @@ export default {
       return statusMap[this.request.status]
     },
     animalData() {
-      return `Собака, ${this.request.animal.idcard}`
+      return `Собака, id: ${this.request.id}`
     }
   },
   methods: {
     dodecline() {
       this.loading = true
       setTimeout(() => {
+        this.status = 'declined'
         this.loading = false
         this.$notify({
           title: 'Заявка отклонена',
@@ -74,6 +75,7 @@ export default {
     doaccept() {
       this.loading = true
       setTimeout(() => {
+        this.status = 'approved'
         this.loading = false
         this.$notify({
           title: 'Заявка отклонена',
@@ -107,7 +109,7 @@ export default {
     &--declined {
       color: red;
     }
-    &--accepted {
+    &--approved {
       color: green;
     }
   }

@@ -28,12 +28,8 @@
     </div>
 
     <div class="requests__list-wrapper">
-      <ul
-        class="requests__list"
-        v-infinite-scroll="fetch"
-        infinite-scroll-disabled="infiniteScrollDisabled"
-        v-if="requestsList.length > 0"
-      >
+      <ul class="requests__list" infinite-scroll-disabled="infiniteScrollDisabled" v-if="requestsList.length > 0">
+        фывы
         <v-request-item v-for="(item, index) in requestsList" :key="index" :request="item"></v-request-item>
       </ul>
       <p class="requests__list-info" v-if="loading"><i class="el-icon-loading"></i> Загрузка...</p>
